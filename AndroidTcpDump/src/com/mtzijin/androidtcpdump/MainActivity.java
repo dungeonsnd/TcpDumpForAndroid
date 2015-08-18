@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import com.mtzijin.androidtcpdumpsdk.TcpDumpInterface;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
-	private String TAG ="MainActivity";
-
+	
 	/**
 	 * 应用程序运行命令获取 Root权限，设备必须已破解(获得ROOT权限)
 	 * 
@@ -29,19 +26,23 @@ public class MainActivity extends ActionBarActivity {
 	    Process process = null;
 	    DataOutputStream os = null;
 	    try {
-	        String cmd="chmod 777 " + pkgCodePath;
 	        process = Runtime.getRuntime().exec("su"); //切换到root帐号
 	        os = new DataOutputStream(process.getOutputStream());
+	        
+	        String cmd="chmod 777 " + pkgCodePath;
 	        os.writeBytes(cmd + "\n");
+	        os.flush();
+	        
 	        os.writeBytes("exit\n");
 	        os.flush();
+	        
 	        process.waitFor();
 	    } catch (Exception e) {
 	        return false;
 	    } finally {
 	        try {
 	            if (os != null) {
-	                os.close();
+//	                os.close();
 	            }
 //	            process.destroy();
 	        } catch (Exception e) {
